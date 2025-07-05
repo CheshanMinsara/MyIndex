@@ -5,11 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Game & Software Index</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
       color: #f0f0f0;
     }
@@ -22,6 +22,7 @@
     }
 
     h1 {
+      font-family: 'Orbitron', sans-serif;
       margin: 0;
       font-size: 2.5rem;
     }
@@ -46,26 +47,36 @@
     }
 
     li {
-      margin: 0.4rem 0;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
     }
 
     a.download-btn {
       display: inline-block;
-      padding: 0.5rem 1rem;
-      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      padding: 0.6rem 1.2rem;
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
       color: white;
       border-radius: 6px;
       text-decoration: none;
       font-weight: bold;
-      transition: background 0.3s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 10px rgba(229, 46, 113, 0.5);
     }
 
     a.download-btn:hover {
-      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px rgba(229, 46, 113, 0.8);
     }
 
     input[type="text"] {
-      width: 100%;
+      background-color: #1c1c2e;
+      color: #fff;
+      border: 1px solid #555;
       padding: 0.75rem;
       margin: 1rem 0;
       border-radius: 8px;
@@ -75,6 +86,26 @@
 
     .hidden {
       display: none;
+    }
+
+    
+    #toTopBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 0.7rem 1rem;
+      font-size: 1.5rem;
+      background-color: #ff5c8d;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 92, 141, 0.5);
+      display: none;
+      z-index: 1000;
+    }
+    #toTopBtn:hover {
+      background-color: #e60073;
     }
 
     footer {
@@ -126,6 +157,15 @@
       background-position: center;
       background-attachment: fixed;
       transition: background-image 1.5s ease-in-out;
+    }
+
+    
+    .card-box {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
     }
 
     body::before {
@@ -334,6 +374,15 @@
     // Change background every 8 seconds
     setInterval(cycleBackgrounds, 8000);
 
+    
+window.onscroll = function () {
+  const btn = document.getElementById("toTopBtn");
+  btn.style.display = window.scrollY > 300 ? "block" : "none";
+};
+document.getElementById("toTopBtn").onclick = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
     // Rest of your existing JavaScript (search functionality, etc.)
     document.addEventListener('DOMContentLoaded', function () {
       // Your existing initialization code
@@ -385,6 +434,7 @@
     <!-- Example of adding hyperlinks from a PDF to HTML below.
          Replace/add more <li> as needed, using the format below. -->
 
+    <div class="card-box">
     <div class="section-title">Games A-Z</div>
     <ul>
       <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/4" target="_blank">Assassin's Creed Mirage
@@ -544,8 +594,9 @@
       <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1623" target="_blank">WWE 2K18 🤼‍♂️🏆</a></li>
       <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2003" target="_blank">WWE 2K22</a></li>
     </ul>
-
-    <div class="section-title">Softwares</div>
+    </div>
+    <div class="card-box">
+    <div class="section-title">Softwares | Password : 123</div>
     <ul>
       <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1774" target="_blank">Wondershare Recoverit
           (2025) Pre-Activated 💾</a></li>
@@ -560,6 +611,7 @@
       <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1873" target="_blank">Internet Download Manager
           ⬇</a></li>
     </ul>
+    </div>
   </section>
 
   <footer>
@@ -569,6 +621,9 @@
         target="_blank">@fitgirldodirepacks</a></p>
     <p>If Password asks: 123</p>
   </footer>
+
+  <button id="toTopBtn">⬆</button>
+
 </body>
 
 </html>
