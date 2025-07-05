@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game & Software Index</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #f0f0f0;
+    }
+
+    header {
+      padding: 2rem;
+      text-align: center;
+      background: linear-gradient(to right, #fc466b, #3f5efb);
+      color: white;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    section {
+      padding: 1rem 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      color: #ffcc70;
+      margin-top: 2rem;
+      border-bottom: 1px solid #ffcc70;
+      padding-bottom: 0.5rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    a.download-btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 10px rgba(229, 46, 113, 0.5);
+    }
+
+    a.download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px rgba(229, 46, 113, 0.8);
+    }
+
+    input[type="text"] {
+      background-color: #1c1c2e;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 0.75rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    
+    #toTopBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 0.7rem 1rem;
+      font-size: 1.5rem;
+      background-color: #ff5c8d;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 92, 141, 0.5);
+      display: none;
+      z-index: 1000;
+    }
+    #toTopBtn:hover {
+      background-color: #e60073;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+
+    .note {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    /* Add these to the end of your existing style section */
+    .hidden {
+      opacity: 0;
+      height: 0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .search-highlight {
+      background-color: rgba(255, 204, 112, 0.3);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 1rem;
+      color: #ff6b6b;
+      font-style: italic;
+    }
+
+    .game-name {
+      display: inline-block;
+      min-width: 250px;
+    }
+
+    body {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transition: background-image 1.5s ease-in-out;
+    }
+
+    
+    .card-box {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 12, 41, 0.85);
+      /* Dark blue overlay */
+      z-index: -1;
+    }
+
+    /* Background styles - add to your existing styles */
+    body {
+      position: relative;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      /* Fallback gradient */
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .background-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(2px) brightness(0.4);
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .background-image.active {
+      opacity: 1;
+    }
+  </style>
+  <script>
+    // Debounce function to limit how often the search runs
+    function debounce(func, wait) {
+      let timeout;
+      return function () {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          func.apply(context, args);
+        }, wait);
+      };
+    }
+
+    // Simple fuzzy match function
+    function fuzzyMatch(text, search) {
+      text = text.toLowerCase().replace(/[^a-z0-9]/g, '');
+      search = search.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+      if (search === '') return { matched: true, score: 0 };
+
+      let searchPos = 0;
+      let firstMatchPos = -1;
+      let matches = 0;
+
+      for (let i = 0; i < text.length; i++) {
+        if (text[i] === search[searchPos]) {
+          if (firstMatchPos === -1) firstMatchPos = i;
+          matches++;
+          searchPos++;
+          if (searchPos >= search.length) break;
+        }
+      }
+
+      const matched = searchPos === search.length;
+      const score = matched ? (matches / search.length) + (1 - (firstMatchPos / text.length)) : 0;
+
+      return { matched, score };
+    }
+
+    // Highlight matching text
+    function highlightText(text, search) {
+      if (!search) return text;
+
+      const regex = new RegExp(`(${search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    // Main search function
+    function searchIndex() {
+      const input = document.getElementById('search').value;
+      const items = document.querySelectorAll('li:not(.no-results)');
+      const gamesList = document.querySelector('.section-title + ul');
+      let hasResults = false;
+
+      // First pass - calculate scores
+      const itemsWithScores = Array.from(items).map(item => {
+        const text = item.textContent.replace(/[^\w\s]/g, '');
+        const { matched, score } = fuzzyMatch(text, input);
+        return { item, matched, score };
+      });
+
+      // Filter and sort
+      const matchedItems = itemsWithScores
+        .filter(({ matched }) => matched)
+        .sort((a, b) => b.score - a.score);
+
+      // Show/hide items
+      items.forEach(item => {
+        item.classList.add('hidden');
+        item.style.order = '';
+      });
+
+      if (input.length > 0) {
+        matchedItems.forEach(({ item }, index) => {
+          item.classList.remove('hidden');
+          item.style.order = -index;
+          hasResults = true;
+
+          // Highlight matching text
+          const gameName = item.querySelector('.game-name');
+          if (gameName) {
+            gameName.innerHTML = highlightText(gameName.textContent, input);
+          }
+        });
+
+        // Show "no results" message if needed
+        const noResults = document.querySelector('.no-results');
+        if (!hasResults) {
+          if (!noResults) {
+            const li = document.createElement('li');
+            li.className = 'no-results';
+            li.textContent = 'No games or software found matching your search';
+            gamesList.appendChild(li);
+          } else {
+            noResults.classList.remove('hidden');
+          }
+        } else if (noResults) {
+          noResults.classList.add('hidden');
+        }
+      } else {
+        // Show all if search is empty
+        items.forEach(item => {
+          item.classList.remove('hidden');
+          const gameName = item.querySelector('.game-name');
+          if (gameName) {
+            gameName.innerHTML = gameName.textContent;
+          }
+        });
+
+        const noResults = document.querySelector('.no-results');
+        if (noResults) noResults.classList.add('hidden');
+      }
+    }
+
+    // Initialize with debounced search
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('search');
+      searchInput.addEventListener('input', debounce(searchIndex, 300));
+
+      // Add game-name spans to all items
+      document.querySelectorAll('li:not(.no-results)').forEach(li => {
+        const link = li.querySelector('a.download-btn');
+        if (link) {
+          const text = link.textContent;
+          const emojiMatch = text.match(/[\p{Emoji}]/gu);
+          const emoji = emojiMatch ? emojiMatch[0] : '';
+          const name = text.replace(emoji, '').trim();
+
+          link.innerHTML = `<span class="game-name">${name}</span> ${emoji}`;
+        }
+      });
+    });
+    // Dynamic background images
+    const gamingBackgrounds = [
+      "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
+      "url('https://images.unsplash.com/photo-1598550476439-6847785fcea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
+      "url('https://images.unsplash.com/photo-1560253023-3ec5d502959f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
+      "url('https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"
+    ];
+
+    let currentBg = 0;
+
+    function changeBackground() {
+      document.body.style.backgroundImage = gamingBackgrounds[currentBg];
+      currentBg = (currentBg + 1) % gamingBackgrounds.length;
+    }
+
+    // Change background every 8 seconds
+    changeBackground();
+    setInterval(changeBackground, 8000);
+    // Background image cycling
+    function cycleBackgrounds() {
+      const images = document.querySelectorAll('.background-image');
+      let current = document.querySelector('.background-image.active');
+      let next = current.nextElementSibling || images[0];
+
+      current.classList.remove('active');
+      next.classList.add('active');
+    }
+
+    // Change background every 8 seconds
+    setInterval(cycleBackgrounds, 8000);
+
+    
+window.onscroll = function () {
+  const btn = document.getElementById("toTopBtn");
+  btn.style.display = window.scrollY > 300 ? "block" : "none";
+};
+document.getElementById("toTopBtn").onclick = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+    // Rest of your existing JavaScript (search functionality, etc.)
+    document.addEventListener('DOMContentLoaded', function () {
+      // Your existing initialization code
+      const searchInput = document.getElementById('search');
+      searchInput.addEventListener('input', debounce(searchIndex, 300));
+
+      document.querySelectorAll('li:not(.no-results)').forEach(li => {
+        const link = li.querySelector('a.download-btn');
+        if (link) {
+          const text = link.textContent;
+          const emojiMatch = text.match(/[\p{Emoji}]/gu);
+          const emoji = emojiMatch ? emojiMatch[0] : '';
+          const name = text.replace(emoji, '').trim();
+          link.innerHTML = `<span class="game-name">${name}</span> ${emoji}`;
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="background-container">
+    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e" class="background-image active"
+      alt="Gaming background">
+    <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6" class="background-image"
+      alt="Gaming background">
+    <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f" class="background-image"
+      alt="Gaming background">
+    <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1" class="background-image"
+      alt="Gaming background">
+  </div>
+  <header>
+    <h1>Index of Games & Softwares 💻</h1>
+    <p>Updated June 01, 2025 | By <a href="https://t.me/fitgirldodirepacks" target="_blank">@fitgirldodirepacks</a>
+    </p>
+  </header>
+
+  <section>
+    <div class="note">
+      <p>✤ Hey everyone! I'm uploading games to the channel using free methods, so my upload limit is 60GB. Games
+        larger than that will need to be downloaded directly using FitGirl Repacks. If you're unsure how to do a direct
+        download, this video will help: <a href="https://t.me/fitgirldodirepacks/1688" target="_blank">Fitgirl Repacks
+          Download Tutorial</a>.</p>
+      <p>Thanks for your understanding! 😊</p>
+    </div>
+
+    <input type="text" id="search" oninput="searchIndex()" placeholder="🔍 Search games or software..." />
+
+    <!-- Example of adding hyperlinks from a PDF to HTML below.
+         Replace/add more <li> as needed, using the format below. -->
+
+    <div class="card-box">
+    <div class="section-title">Games A-Z</div>
+    <ul>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/4" target="_blank">Assassin's Creed Mirage
+          🏰</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/482" target="_blank">Assassin's Creed Origins
+          🏛️</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1372" target="_blank">Assassin's Creed:
+          Brotherhood ⚔️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1722" target="_blank">Assassins Creed Revelation
+          🕌</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1921" target="_blank">Airport Simulator 2019
+          ✈️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1969" target="_blank">Assassin's Creed III
+          🏹</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2262" target="_blank">A Plague Tale:
+          Innocence 🐀</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2289" target="_blank">A Plague Tale: Requiem
+          🐀⚔️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/311" target="_blank">Battlefield 3 💥</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/800" target="_blank">Battlefield 4 💥</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1596" target="_blank">Battlefield Hardline
+          👮</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2337" target="_blank">Bully 🏫</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2234" target="_blank">Call of Duty 2 🔫</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/562" target="_blank">Call of Duty: Ghosts 👻</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/749" target="_blank">Call of Duty: Black Ops
+          🕶️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/301" target="_blank">Call of Duty 4: Modern
+          Warfare
+          🎖️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/800" target="_blank">Call of Duty: Modern
+          Warfare 2 💣</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/945" target="_blank">Call of Duty: Modern
+          Warfare
+          3
+          💥</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2465" target="_blank">Call of Duty: Modern
+          Warfare
+          🎯</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2354" target="_blank">Call of Duty: Modern
+          Warfare
+          II
+          🎖️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2118" target="_blank">Call of Duty: Modern
+          Warfare
+          III
+          💣</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2246" target="_blank">Call of Juarez:
+          Gunslinger 🤠</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1250" target="_blank">Cricket 24 🏏</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1272" target="_blank">Cricket 19 🏏</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/406" target="_blank">Detroit: Become Human
+          🤖</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1762" target="_blank">Drive Beyond Horizons
+          🚗</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1176" target="_blank">Euro Truck Simulator
+          2 🚛</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1317" target="_blank">Elden Ring 💍</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/975" target="_blank">Far Cry ⚠️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/992" target="_blank">Far Cry 2 🔫</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/327" target="_blank">Far Cry 3 🏝️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/621" target="_blank">Far Cry 4 🏔️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/581" target="_blank">Far Cry 5 🏞️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/726" target="_blank">Far Cry Primal 🦣</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1017" target="_blank">Far Cry New Dawn 🌅</a>
+      </li>
+      </li>
+      <li><a class="download-btn" href="#" target="_blank">Far Cry 6 🏝️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1427" target="_blank">Farming Simulator 25
+          🚜</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1586" target="_blank">Fantastic Four 4️⃣</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2431" target="_blank">FIFA 16 ⚽</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1650" target="_blank">FIFA 17 ⚽</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1881" target="_blank">FIFA 23 ⚽</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1938" target="_blank">Farming Simulator 22
+          🚜</a></li>
+      <li><a class="download-btn" href="#" target="_blank">Forza Horizon 🏎️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2323" target="_blank">Forza Horizon 2 🏎️</a>
+      </li>
+      <li><a class="download-btn" href="#" target="_blank">Forza Horizon 3 🏎️</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2374" target="_blank">Forza Horizon 4 🏎️</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2145" target="_blank">Forza Horizon 5 🏎️</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/38" target="_blank">God of War ⚔️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/113" target="_blank">Ghost of Tsushima </a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/360" target="_blank">GTA - The Original Trilogy
+          🚗</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/381" target="_blank">GTA IV - Complete Edition
+          🗽</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/453" target="_blank">GTA V 🌃</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/857" target="_blank">GRID Autosport 🏁</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/882" target="_blank">Grand Theft Auto: San
+          Andreas 🌴</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1453" target="_blank">Grand Theft Auto V
+          Enhanced 🌆</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1159" target="_blank">Homefront 🏠</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1742" target="_blank">Human: Blood Money 💰</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1150" target="_blank">IGI 1 🔫</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/203" target="_blank">Just Cause 4 🪂</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1514" target="_blank">Just Cause 3 🪂</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/157" target="_blank">Marvel's Spider-Man
+          Remastered 🕷</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1135" target="_blank">Medal of Honor 🎖️</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1406" target="_blank">Mafia: Definitive Edition
+          🕴️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1825" target="_blank">Mafia II 🕴️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/271" target="_blank">Need for Speed: Most Wanted
+          2012 🚓</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1202" target="_blank">Need for Speed: Most
+          Wanted 2005 🚓</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1388" target="_blank">Red Dead Redemption 🤠</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2203" target="_blank">Red Dead Redemption 2
+          🤠</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/655" target="_blank">Rise of the Tomb
+          Raider ⭐</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/839" target="_blank">Resident Evil 5 🧟</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/233" target="_blank">Spider-Man: Miles
+          Morales 🕸️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/545" target="_blank">Sniper: Ghost Warrior
+          🔫</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/772" target="_blank">Sniper Ghost
+          Warrior Contracts 🔫</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/908" target="_blank">Shadow of the
+          Tomb Raider ⚔️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1349" target="_blank">Stray 🐈</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1483" target="_blank">Sekiro: Shadows
+          Die Twice ⚔️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1563" target="_blank">Sons of the Forest
+          🌲</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/689" target="_blank">The Amazing
+          Spider-Man 🕷️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/704" target="_blank">The Genesis Order 🧬</a>
+      </li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1050" target="_blank">The Last of Us Part I
+          💔</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1106" target="_blank">The Legend of Zelda:
+          Breath
+          of the Wild 🗡️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1221" target="_blank">Tom Clancy's
+          Splinter Cell 🕵️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1234" target="_blank">Tom Clancy's Splinter
+          Cell:
+          Conviction 🕵️</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1297" target="_blank">Taxi
+          Life A City Driving Simulator 🚖</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1696" target="_blank">Total Overdose 💊</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1623" target="_blank">WWE 2K18 🤼‍♂️🏆</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/2003" target="_blank">WWE 2K22</a></li>
+    </ul>
+    </div>
+    <div class="card-box">
+    <div class="section-title">Softwares | Password : 123</div>
+    <ul>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1774" target="_blank">Wondershare Recoverit
+          (2025) Pre-Activated 💾</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1778" target="_blank">Adobe Illustrator (Latest
+          2025) Pre-Activated 🎨</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1791?single" target="_blank">Windows 7 | 8.1 |
+          10 | 11 (Pre-Activated) 💻</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1806" target="_blank">Adobe Photoshop 2025
+          Pre-Activated 📸</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1811" target="_blank">Microsoft Office 2021-2024
+          Professional Plus 📊</a></li>
+      <li><a class="download-btn" href="https://t.me/fitgirldodirepacks/1873" target="_blank">Internet Download Manager
+          ⬇</a></li>
+    </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>Games and Software repacks provided for personal use only. All trademarks are the property of their respective
+      owners.</p>
+    <p>Join the full channel on Telegram: <a href="https://t.me/fitgirldodirepacks"
+        target="_blank">@fitgirldodirepacks</a></p>
+    <p>If Password asks: 123</p>
+  </footer>
+
+  <button id="toTopBtn">⬆</button>
+
+</body>
+
+</html>
